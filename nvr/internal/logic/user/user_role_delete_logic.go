@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 
+	"github.com/qdwl/go-nvr/nvr/internal/repository"
 	"github.com/qdwl/go-nvr/nvr/internal/svc"
 	"github.com/qdwl/go-nvr/nvr/internal/types"
 
@@ -24,7 +25,15 @@ func NewUserRoleDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Us
 }
 
 func (l *UserRoleDeleteLogic) UserRoleDelete(req *types.UserRoleDeleteReq) (resp *types.UserRoleDeleteResp, err error) {
-	// todo: add your logic here and delete this line
+	resp = new(types.UserRoleDeleteResp)
+	err = repository.DeleteRole(req.Id)
+	if err != nil {
+		resp.Code = int(types.RESTFUL_ERR_DATABASE_OPERATION_FAILED)
+		resp.Msg = types.RESTFUL_ERR_DATABASE_OPERATION_FAILED.String()
+	}
+
+	resp.Code = int(types.RESTFUL_ERR_OK)
+	resp.Msg = types.RESTFUL_ERR_OK.String()
 
 	return
 }

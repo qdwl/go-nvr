@@ -6,6 +6,7 @@ import (
 
 	"github.com/qdwl/go-nvr/nvr/internal/config"
 	"github.com/qdwl/go-nvr/nvr/internal/handler"
+	"github.com/qdwl/go-nvr/nvr/internal/model"
 	"github.com/qdwl/go-nvr/nvr/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -19,6 +20,8 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+
+	model.NewDB()
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
