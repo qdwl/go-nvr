@@ -1,0 +1,155 @@
+type Base {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}
+
+type UserLoginReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type UserLoginToken {
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
+type UserLoginResp {
+	Base
+	Data UserLoginToken `json:"data"`
+}
+
+type UserRole {
+	Id     int64  `json:"id,optional"`
+	Name   string `json:"name"`
+	Type   string `json:"type"`
+	Remark string `json:"remark"`
+}
+
+type UserRoleAddReq {
+	UserRole
+}
+
+type UserRoleAddResp {
+	Base
+}
+
+type UserRoleListReq {
+	Page int    `form:"page,optional"`
+	Size int    `form:"size,optional"`
+	Type string `form:"type,optional"`
+}
+
+type UserRoleList {
+	List  []*UserRole `json:"list"`
+	Count int64       `json:"count"`
+}
+
+type UserRoleListResp {
+	Base
+	Data UserRoleList `json:"data"`
+}
+type UserRoleDeleteReq {
+	Id int64 `path:"id"`
+}
+
+type UserRoleDeleteResp {
+	Base
+}
+
+type UserRoleUpdateReq {
+	UserRole
+}
+
+type UserRoleUpdateResp {
+	Base
+}
+
+type UserInfo {
+	Id       int64  `json:"id,optional"`
+	UserId   string `json:"userId"`
+	UserName string `json:"userName"`
+	Password string `json:"password"`
+	RoleId   int64  `json:"roleId"`
+	Remark   string `json:"remark"`
+}
+
+type UserInfoAddReq {
+	UserInfo
+}
+type UserInfoAddResp {
+	Base
+}
+
+type UserInfoDeleteReq {
+	Id int64 `path:"id"`
+}
+
+type UserInfoDeleteResp {
+	Base
+}
+
+type UserInfoUpdateReq {
+	UserInfo
+}
+type UserInfoUpdateResp {
+	Base
+}
+
+type UserInfoListReq {
+	Page int `form:"page,optional"`
+	Size int `form:"size,optional"`
+}
+
+type UserInfoList {
+	List  []*UserInfo `json:"list"`
+	Count int64       `json:"count"`
+}
+
+type UserInfoListResp {
+	Base
+	Data UserInfoList `json:"data"`
+}
+
+@server(
+	prefix: /api/v1
+	group: user
+)
+
+service nvr {
+	@handler UserLogin
+	post /user/login (UserLoginReq) returns (UserLoginResp)
+}
+
+@server(
+	prefix: /api/v1
+	jwt: Auth
+	group: user
+)
+
+service nvr {
+	// 定义 http.HandleFunc 转换的 go 文件名称及方法
+	@handler UserRoleAdd
+	post /user/role/add (UserRoleAddReq) returns (UserRoleAddResp)
+	
+	@handler UserRoleDelete
+	delete /user/role/:id (UserRoleDeleteReq) returns (UserRoleDeleteResp)
+	
+	@handler UserRoleUpdate
+	post /user/role/update (UserRoleUpdateReq) returns (UserRoleUpdateResp)
+	
+	@handler UserRoleList
+	get  /user/role/list (UserRoleListReq) returns (UserRoleListResp)
+	
+	@handler UserInfoAdd
+	post /user/info/add (UserInfoAddReq) returns (UserInfoAddResp)
+	
+	@handler UserInfoDelete
+	delete /user/info/:id (UserInfoDeleteReq) returns (UserInfoDeleteResp)
+	
+	@handler UserInfoUpdate
+	post /user/info/update (UserInfoUpdateReq) returns (UserInfoUpdateResp)
+	
+	@handler UserInfoList
+	get /user/info/list (UserInfoListReq) returns (UserInfoListResp)
+}
