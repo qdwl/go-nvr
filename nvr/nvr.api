@@ -153,3 +153,80 @@ service nvr {
 	@handler UserInfoList
 	get /user/info/list (UserInfoListReq) returns (UserInfoListResp)
 }
+
+type ChannelInfo {
+	Id        int64   `json:"id,optional"`
+	Name      string  `json:"name"`
+	Enable    int64   `json:"enable"`
+	Ip        string  `json:"ip"`
+	Port      int64   `json:"port"`
+	UserName  string  `json:"userName"`
+	Password  string  `json:"password"`
+	Protocol  string  `json:"protocol"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+	Remark    string  `json:"remark"`
+}
+
+type ChannelAddReq {
+	ChannelInfo
+}
+type ChannelAddResp {
+	Base
+}
+
+type ChannelDeleteReq {
+	Id int64 `path:"id"`
+}
+
+type ChannelDeleteResp {
+	Base
+}
+
+type ChannelUpdateReq {
+	ChannelInfo
+}
+type ChannelUpdateResp {
+	Base
+}
+
+type ChannelListReq {
+	Page     int    `form:"page,optional"`
+	Size     int    `form:"size,optional"`
+	Id       *int64 `form:"id,optional"`
+	Name     string `form:"name,optional"`
+	Ip       string `form:"ip,optional"`
+	Protocol string `form:"protocol,optional"`
+	Status   *uint8 `form:"status,optional"`
+}
+
+type ChannelList {
+	List  []*ChannelInfo `json:"list"`
+	Count int64          `json:"count"`
+}
+
+type ChannelListResp {
+	Base
+	Data ChannelList `json:"data"`
+}
+
+@server(
+	prefix: /api/v1
+	jwt: Auth
+	group: channel
+)
+
+service nvr {
+	// 定义 http.HandleFunc 转换的 go 文件名称及方法
+	@handler ChannelAdd
+	post /channel/add (ChannelAddReq) returns (ChannelAddResp)
+	
+	@handler ChannelDelete
+	delete /channel/info/:id (ChannelDeleteReq) returns (ChannelDeleteResp)
+	
+	@handler ChannelUpdate
+	post /channel/info/update (ChannelUpdateReq) returns (ChannelUpdateResp)
+	
+	@handler ChannelList
+	get /channel/info/list (ChannelListReq) returns (ChannelListResp)
+}

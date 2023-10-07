@@ -116,3 +116,61 @@ type UserInfoListResp struct {
 	Base
 	Data UserInfoList `json:"data"`
 }
+
+type ChannelInfo struct {
+	Id        int64   `json:"id,optional"`
+	Name      string  `json:"name"`
+	Enable    int64   `json:"enable"`
+	Ip        string  `json:"ip"`
+	Port      int64   `json:"port"`
+	UserName  string  `json:"userName"`
+	Password  string  `json:"password"`
+	Protocol  string  `json:"protocol"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+	Remark    string  `json:"remark"`
+}
+
+type ChannelAddReq struct {
+	ChannelInfo
+}
+
+type ChannelAddResp struct {
+	Base
+}
+
+type ChannelDeleteReq struct {
+	Id int64 `path:"id"`
+}
+
+type ChannelDeleteResp struct {
+	Base
+}
+
+type ChannelUpdateReq struct {
+	ChannelInfo
+}
+
+type ChannelUpdateResp struct {
+	Base
+}
+
+type ChannelListReq struct {
+	Page     int    `form:"page,optional"`
+	Size     int    `form:"size,optional"`
+	Id       *int64 `form:"id,optional"`
+	Name     string `form:"name,optional"`
+	Ip       string `form:"ip,optional"`
+	Protocol string `form:"protocol,optional"`
+	Status   *uint8 `form:"status,optional"`
+}
+
+type ChannelList struct {
+	List  []*ChannelInfo `json:"list"`
+	Count int64          `json:"count"`
+}
+
+type ChannelListResp struct {
+	Base
+	Data ChannelList `json:"data"`
+}

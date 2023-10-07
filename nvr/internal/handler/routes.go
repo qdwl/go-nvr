@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	channel "github.com/qdwl/go-nvr/nvr/internal/handler/channel"
 	user "github.com/qdwl/go-nvr/nvr/internal/handler/user"
 	"github.com/qdwl/go-nvr/nvr/internal/svc"
 
@@ -63,6 +64,33 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/user/info/list",
 				Handler: user.UserInfoListHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/api/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/channel/add",
+				Handler: channel.ChannelAddHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/channel/info/:id",
+				Handler: channel.ChannelDeleteHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/channel/info/update",
+				Handler: channel.ChannelUpdateHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/channel/info/list",
+				Handler: channel.ChannelListHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
